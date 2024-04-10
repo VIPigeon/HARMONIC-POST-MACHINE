@@ -7,6 +7,7 @@ game.player = {
 
 game.playing = false
 game.playbutton = {x = 2, y = 1}
+game.metronome = Metronome4_4:new(8)
 
 function game.player.draw()
     local x1 = game.player.x
@@ -134,6 +135,7 @@ function game.update()
     game.tape:display()
     game.control()
     Time.update()
+    game.metronome:update()
     game.draw()
 end
 

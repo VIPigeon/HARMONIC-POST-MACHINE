@@ -1,6 +1,6 @@
 
 Metronome4_4 = table.copy(Metronome)
-
+M44 = 24
 
 function Metronome4_4:new(bpm)
     bpm = bpm * M44  -- теперь на одну четверть приходится M44 ударов вместо 1

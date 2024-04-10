@@ -76,6 +76,9 @@ function Tape:isMarked()
 end
 
 function Tape:update()
+    if not game.metronome.onBeat then
+        return
+    end
     local i = program.pos.i
     self:_execute(program[i])
     if program[i].type == 1 then
