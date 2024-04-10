@@ -74,7 +74,7 @@ end
 function Tape:isMarked()
     return self.node.word & math.pow(2, self.player - 1) == 0
 end
--- сделать видео Амалии
+
 function Tape:update()
     local i = program.pos.i
     self:_execute(program[i])
