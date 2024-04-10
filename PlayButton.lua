@@ -13,4 +13,5 @@ function PlayButton:onPress()
     game.playing = not game.playing
     program.pos.i = 1
     mset(game.playbutton.x, game.playbutton.y, game.playing and PlayButton.stopTile or PlayButton.runTile)
+    game.tape:init()
 end

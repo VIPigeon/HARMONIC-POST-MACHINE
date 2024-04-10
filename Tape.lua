@@ -15,11 +15,15 @@ function Node:new(word)
     self.__index = self; return obj
 end
 
+Tape.start_player_pos = 20
+
 function Tape:new(x, y, start_word)
     local obj = {
         x = x, y = y,
         node = Node:new(start_word),
-        player = 12,
+        start_word = start_word,
+        player = Tape.start_player_pos,
+        direction = 1,
     }
     -- чистая магия!
     setmetatable(obj, self)
@@ -27,15 +31,23 @@ function Tape:new(x, y, start_word)
 end
 
 
+function Tape:init()
+    self.node = Node:new(self.start_word)
+    mset(self.x + 24 - self.player, self.y - 1, 0)
+    self.player = Tape.start_player_pos
+end
+
+
 function Tape:display()
     local n = self.node.word
+    -- trace(n)
     local cnt = self.player
     for i = self.x + 23, self.x, -1 do
         mset(i, self.y, Tape.tile + n % 2)
         n = n >> 1
         cnt = cnt - 1
         if cnt == 0 then
-            mset(i, self.y - 1, 114)
+            mset(i, self.y - 1, 114 + self.direction)
         end
     end
 end
@@ -47,7 +59,7 @@ function Tape:_execute(command)
     if type == 4 then
         self.node.word = self.node.word ~ math.pow(2, self.player - 1)
     elseif type == 2 then
-        -- trace("!")
+        self.direction = 0
         mset(self.x + 24 - self.player, self.y - 1, 0)
         self.player = self.player + 1
         if self.player == 25 then
@@ -58,6 +70,7 @@ function Tape:_execute(command)
             self.node = nn
         end
     elseif type == 3 then
+        self.direction = 1
         mset(self.x + 24 - self.player, self.y - 1, 0)
         self.player = self.player - 1
         if self.player == 0 then
