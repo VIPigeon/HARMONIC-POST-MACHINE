@@ -64,10 +64,14 @@ function Tape:_execute(command)
         self.player = self.player + 1
         if self.player == 25 then
             self.player = 1
-            local nn = Node:new(0)
-            nn.prev = self.node
-            self.node.next = nn
-            self.node = nn
+            if self.node.next then
+                self.node = self.node.next
+            else
+                local nn = Node:new(0)
+                nn.prev = self.node
+                self.node.next = nn
+                self.node = nn
+            end
         end
     elseif type == 3 then
         self.direction = 1
@@ -75,17 +79,22 @@ function Tape:_execute(command)
         self.player = self.player - 1
         if self.player == 0 then
             self.player = 24
-            local nn = Node:new(0)
-            nn.next = self.node
-            self.node.prev = nn
-            self.node = nn
+            if self.node.prev then
+                self.node = self.node.prev
+            else
+                local nn = Node:new(0)
+                nn.next = self.node
+                self.node.prev = nn
+                self.node = nn
+            end
         end
     end
 end
 
 
 function Tape:isMarked()
-    return self.node.word & math.pow(2, self.player - 1) == 0
+    -- What's hapenning? I don't care
+    return self.node.word & math.pow(2, self.player - 1) > 0
 end
 
 function Tape:update()
@@ -98,10 +107,19 @@ function Tape:update()
         game.buttons[game.playbutton.x][game.playbutton.y]:onPress()
         return
     end
-    if program[i].type == 5 and self:isMarked() then
+    if program[i].type == 5 and not self:isMarked() then
         -- trace(i.." "..program[i].altCommand.." "..program[i].nextCommand)
         program.pos.i = program[i].altCommand
     else
         program.pos.i = program[i].nextCommand
+    end
+    self:sfx()
+end
+
+function Tape:sfx()
+    if self:isMarked() then
+        harmonic(self.player, "draw")
+    else
+        harmonic(self.player, "blow")
     end
 end

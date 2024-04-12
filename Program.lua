@@ -1,5 +1,5 @@
 program = {}
-program.capacity = 8
+program.capacity = 32
 program.pos = {x = 5, y = 3, i = 1}
 
 program.dx_in = 2
